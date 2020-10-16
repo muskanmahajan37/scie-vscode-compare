@@ -1,0 +1,1 @@
+# scie-vscode-compare
