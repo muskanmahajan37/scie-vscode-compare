@@ -21,12 +21,13 @@ const registry = new vsctm.Registry({
         createOnigString: (str) => new oniguruma.OnigString(str)
     }),
     loadGrammar: (scopeName) => {
-        return readFile('./syntaxes/json/javascript.json').then(data => vsctm.parseRawGrammar(data.toString(), "c.json"))
+        return readFile('./syntaxes/json/groovy.json').then(data => vsctm.parseRawGrammar(data.toString(), "c.json"))
     }
 });
 
-registry.loadGrammar('source.js').then(grammar => {
-    var content = fs.readFileSync("../benchmark/samples/large.js.txt");
+registry.loadGrammar('source.groovy').then(grammar => {
+    // var content = fs.readFileSync("../benchmark/samples/large.js.txt");
+    var content = fs.readFileSync("samples/settings.gradle");
     var text = content.toString().split("\n");
     let ruleStack = vsctm.INITIAL;
 
@@ -35,13 +36,13 @@ registry.loadGrammar('source.js').then(grammar => {
     for (let i = 0; i < text.length; i++) {
         const line = text[i];
         const lineTokens = grammar.tokenizeLine(line, ruleStack);
-        // for (let j = 0; j < lineTokens.tokens.length; j++) {
-        //     const token = lineTokens.tokens[j];
-        //     console.log(` - token from ${token.startIndex} to ${token.endIndex} ` +
-        //         `(${line.substring(token.startIndex, token.endIndex)}) ` +
-        //         `with scopes ${token.scopes.join(', ')}`
-        //     );
-        // }
+        for (let j = 0; j < lineTokens.tokens.length; j++) {
+            const token = lineTokens.tokens[j];
+            console.log(` - token from ${token.startIndex} to ${token.endIndex} ` +
+                `(${line.substring(token.startIndex, token.endIndex)}) ` +
+                `with scopes ${token.scopes.join(', ')}`
+            );
+        }
         ruleStack = lineTokens.ruleStack;
     }
 
