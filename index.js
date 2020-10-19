@@ -21,13 +21,14 @@ const registry = new vsctm.Registry({
         createOnigString: (str) => new oniguruma.OnigString(str)
     }),
     loadGrammar: (scopeName) => {
-        return readFile('./syntaxes/json/groovy.json').then(data => vsctm.parseRawGrammar(data.toString(), "c.json"))
+        return readFile('../scie/extensions/cpp/syntaxes/c.tmLanguage.json').then(data => vsctm.parseRawGrammar(data.toString(), "c.json"))
     }
 });
 
-registry.loadGrammar('source.groovy').then(grammar => {
+registry.loadGrammar('source.c').then(grammar => {
     // var content = fs.readFileSync("../benchmark/samples/large.js.txt");
-    var content = fs.readFileSync("samples/settings.gradle");
+    // var content = fs.readFileSync("samples/settings.gradle");
+    var content = fs.readFileSync("samples/helloworld.c");
     var text = content.toString().split("\n");
     let ruleStack = vsctm.INITIAL;
 
